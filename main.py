@@ -1,4 +1,5 @@
-from TwitterConnector import TwitterConnector
+from TwitterInjector import TwitterInjector
 
-connector = TwitterConnector()
-connector.start_stream(track="macron")
+connector = TwitterInjector()
+connector.start_stream(follow="85741735")
+

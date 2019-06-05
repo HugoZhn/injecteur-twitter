@@ -1,8 +1,10 @@
 import tweepy
+from confluent_kafka import Producer
 from utils import get_from_env
+import json
 
 
-class TwitterConnector:
+class TwitterInjector:
 
     def __init__(self):
         auth = tweepy.OAuthHandler(get_from_env("TWITTER_CONSUMER_KEY"), get_from_env("TWITTER_CONSUMER_SECRET"))
@@ -16,15 +18,26 @@ class TwitterConnector:
         track = [track, ] if (type(track) == str) else track
 
         if follow and track:
-            self.stream.filter(follow=follow, track=track, languages=["fr"])
+            self.stream.filter(follow=follow, track=track, languages=["en"])
         elif follow:
-            self.stream.filter(follow=follow, languages=["fr"])
+            self.stream.filter(follow=follow, languages=["en"])
         elif track:
-            self.stream.filter(track=track, languages=["fr"])
+            self.stream.filter(track=track, languages=["en"])
 
 
 class CustomStreamListener(tweepy.StreamListener):
+
+    def __init__(self):
+        super().__init__()
+        self.producer = Producer({'bootstrap.servers': 'localhost:9092'})
+
     def on_status(self, status):
-        # -- TO DO--
-        print(status.text)
-        pass
+        self.producer.produce("tweets", json.dumps(status._json))
+        print("PRODUCED ONE")
+
+    def on_warning(self, notice):
+        print(notice)
+
+    def on_disconnect(self, notice):
+        print(notice)
+        print("DISCONECTED")
