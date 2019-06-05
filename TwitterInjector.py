@@ -33,7 +33,7 @@ class CustomStreamListener(tweepy.StreamListener):
 
     def on_status(self, status):
         self.producer.produce("tweets", json.dumps(status._json))
-        print("PRODUCED ONE")
+        print("Producing")
 
     def on_warning(self, notice):
         print(notice)
