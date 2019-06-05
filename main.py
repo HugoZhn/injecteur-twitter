@@ -1,5 +1,7 @@
 from TwitterInjector import TwitterInjector
 
-connector = TwitterInjector()
-connector.start_stream(follow="85741735")
+if __name__ == "__main__":
+
+    connector = TwitterInjector()
+    connector.start_stream(follow="85741735")
 
