@@ -34,12 +34,10 @@ class TwitterInjector:
 class CustomStreamListener(tweepy.StreamListener):
 
     def __init__(self):
-        print("*-*GO FUCK YOURSELF*-*")
         super().__init__()
         self.producer = Producer({'bootstrap.servers': 'localhost:9092'})
 
     def on_status(self, status):
-        print("***GOT A TWEET***")
         self.producer.produce("tweets", json.dumps(status._json))
         print("Producing")
 
@@ -48,4 +46,7 @@ class CustomStreamListener(tweepy.StreamListener):
 
     def on_disconnect(self, notice):
         print(notice)
+        print("DISCONECTED")
+
+    def on_timeout(self):
         print("DISCONECTED")
