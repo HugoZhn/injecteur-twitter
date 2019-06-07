@@ -8,13 +8,8 @@ class TwitterInjector:
 
     def __init__(self):
 
-        print("**INITIALIZING THE INJECTOR**")
-        print(get_from_env("TWITTER_CONSUMER_KEY"))
-        print(get_from_env("TWITTER_CONSUMER_SECRET"))
         auth = tweepy.OAuthHandler(get_from_env("TWITTER_CONSUMER_KEY"), get_from_env("TWITTER_CONSUMER_SECRET"))
         auth.set_access_token(get_from_env("TWITTER_ACCESS_TOKEN_KEY"), get_from_env("TWITTER_ACCESS_TOKEN_SECRET"))
-
-        print("**AUTH SET**")
 
         stream_listener = CustomStreamListener()
         self.stream = tweepy.Stream(auth=auth, listener=stream_listener)
@@ -51,3 +46,9 @@ class CustomStreamListener(tweepy.StreamListener):
 
     def on_timeout(self):
         print("DISCONECTED")
+
+    def on_error(self, status_code):
+        print("AAAAAAAAAAAAAAAAAAA")
+        if status_code == 420:
+            # returning False in on_error disconnects the stream
+            return False
