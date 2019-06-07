@@ -7,10 +7,15 @@ import json
 class TwitterInjector:
 
     def __init__(self):
+
+        print("**INITIALIZING THE INJECTOR**")
         auth = tweepy.OAuthHandler(get_from_env("TWITTER_CONSUMER_KEY"), get_from_env("TWITTER_CONSUMER_SECRET"))
         auth.set_access_token(get_from_env("TWITTER_ACCESS_TOKEN_KEY"), get_from_env("TWITTER_ACCESS_TOKEN_SECRET"))
 
+        print("**AUTH SET**")
+
         stream_listener = CustomStreamListener()
+        print("**OPENING THE STREAM**")
         self.stream = tweepy.Stream(auth=auth, listener=stream_listener)
 
     def start_stream(self, follow=None, track=None):
@@ -28,10 +33,12 @@ class TwitterInjector:
 class CustomStreamListener(tweepy.StreamListener):
 
     def __init__(self):
+        print("*-*GO FUCK YOURSELF*-*")
         super().__init__()
         self.producer = Producer({'bootstrap.servers': 'localhost:9092'})
 
     def on_status(self, status):
+        print("***GOT A TWEET***")
         self.producer.produce("tweets", json.dumps(status._json))
         print("Producing")
 
