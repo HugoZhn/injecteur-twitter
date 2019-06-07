@@ -9,13 +9,14 @@ class TwitterInjector:
     def __init__(self):
 
         print("**INITIALIZING THE INJECTOR**")
+        print(get_from_env("TWITTER_CONSUMER_KEY"))
+        print(get_from_env("TWITTER_CONSUMER_SECRET"))
         auth = tweepy.OAuthHandler(get_from_env("TWITTER_CONSUMER_KEY"), get_from_env("TWITTER_CONSUMER_SECRET"))
         auth.set_access_token(get_from_env("TWITTER_ACCESS_TOKEN_KEY"), get_from_env("TWITTER_ACCESS_TOKEN_SECRET"))
 
         print("**AUTH SET**")
 
         stream_listener = CustomStreamListener()
-        print("**OPENING THE STREAM**")
         self.stream = tweepy.Stream(auth=auth, listener=stream_listener)
 
     def start_stream(self, follow=None, track=None):
@@ -25,7 +26,7 @@ class TwitterInjector:
         if follow and track:
             self.stream.filter(follow=follow, track=track, languages=["en"])
         elif follow:
-            print("JE SUIS BIEN LA WLLH")
+            print("**OPENING THE STREAM")
             self.stream.filter(follow=follow, languages=["en"])
         elif track:
             self.stream.filter(track=track, languages=["en"])
