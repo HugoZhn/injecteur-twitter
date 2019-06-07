@@ -48,7 +48,8 @@ class CustomStreamListener(tweepy.StreamListener):
         print("DISCONECTED")
 
     def on_error(self, status_code):
-        print("AAAAAAAAAAAAAAAAAAA")
-        if status_code == 420:
+        print(status_code)
+        return False
+        #if status_code == 420:
             # returning False in on_error disconnects the stream
-            return False
+        #    return False
