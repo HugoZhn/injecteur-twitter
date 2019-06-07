@@ -25,6 +25,7 @@ class TwitterInjector:
         if follow and track:
             self.stream.filter(follow=follow, track=track, languages=["en"])
         elif follow:
+            print("JE SUIS BIEN LA WLLH")
             self.stream.filter(follow=follow, languages=["en"])
         elif track:
             self.stream.filter(track=track, languages=["en"])
