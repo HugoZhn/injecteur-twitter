@@ -31,10 +31,12 @@ class CustomStreamListener(tweepy.StreamListener):
 
     def __init__(self):
         super().__init__()
+        self.topic_name = get_from_env("TOPIC_NAME")
+        print("Gonna produce in ", self.topic_name)
         self.producer = Producer({'bootstrap.servers': 'localhost:9092'})
 
     def on_status(self, status):
-        self.producer.produce("tweets", json.dumps(status._json))
+        self.producer.produce(self.topic_name, json.dumps(status._json))
         print("Producing")
 
     def on_warning(self, notice):
