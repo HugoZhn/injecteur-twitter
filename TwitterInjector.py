@@ -1,7 +1,8 @@
 import tweepy
-from confluent_kafka import Producer
+from confluent_kafka import Producer, KafkaException
 from utils import get_from_env
 import json
+import time
 
 
 class TwitterInjector:
@@ -36,7 +37,12 @@ class CustomStreamListener(tweepy.StreamListener):
         self.producer = Producer({'bootstrap.servers': 'localhost:9092'})
 
     def on_status(self, status):
-        self.producer.produce(self.topic_name, json.dumps(status._json))
+        try:
+            self.producer.produce(self.topic_name, json.dumps(status._json))
+        except KafkaException as ke:
+            print(ke)
+            time.sleep(5)
+            self.producer.produce(self.topic_name, json.dumps(status._json))
         print("Producing")
 
     def on_warning(self, notice):
@@ -52,5 +58,5 @@ class CustomStreamListener(tweepy.StreamListener):
     def on_error(self, status_code):
         print(status_code)
         if status_code == 420:
-            # returning False in on_error disconnects the stream
-            return False
+            time.sleep(120)
+            return True
