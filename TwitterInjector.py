@@ -1,5 +1,5 @@
 import tweepy
-from confluent_kafka import Producer, KafkaException
+from confluent_kafka import Producer
 from utils import get_from_env
 import json
 import time
