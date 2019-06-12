@@ -39,8 +39,8 @@ class CustomStreamListener(tweepy.StreamListener):
     def on_status(self, status):
         try:
             self.producer.produce(self.topic_name, json.dumps(status._json))
-        except KafkaException as ke:
-            print(ke)
+        except BufferError as buff_err:
+            print(buff_err)
             time.sleep(5)
             self.producer.produce(self.topic_name, json.dumps(status._json))
         print("Producing")
