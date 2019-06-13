@@ -41,8 +41,8 @@ class CustomStreamListener(tweepy.StreamListener):
             self.producer.produce(self.topic_name, json.dumps(status._json))
         except BufferError as buff_err:
             print(buff_err)
-            print("Going to pause for a minute")
-            time.sleep(60)
+            print("Going to pause for 15 seconds")
+            time.sleep(15)
             print("Here we go again")
             self.producer.produce(self.topic_name, json.dumps(status._json))
         print("Producing")
